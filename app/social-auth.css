@@ -1,0 +1,32 @@
+.app-dialog.login-dialog{max-width:460px;gap:22px;padding:36px 30px 28px;border-radius:30px}
+.login-dialog [data-slot="dialog-header"]{gap:12px;padding-right:12px}
+.login-dialog [data-slot="dialog-title"]{font-size:clamp(21px,4.9vw,25px);line-height:1.4;letter-spacing:-1.1px;word-break:keep-all}
+.login-dialog [data-slot="dialog-description"]{font-size:14px;line-height:1.7;word-break:keep-all}
+.login-dialog .login-mark.giuti-login{width:126px;height:140px;margin:0 auto 2px}
+.social-auth-panel{display:grid;gap:14px;width:100%}
+.social-auth-buttons{display:grid;gap:12px}
+.social-auth-button{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;padding:14px 22px;border-radius:15px;font-size:16px;font-weight:650;letter-spacing:-.25px;transition:transform .15s,box-shadow .15s}
+.social-auth-button svg{width:23px;height:23px;flex:none}
+.social-google{background:white;color:#303238;border:1px solid #e7e5e3;box-shadow:0 4px 14px #2c1b1110}
+.social-kakao{background:#FEE500;color:#191600;border:1px solid #FEE500;box-shadow:0 4px 12px #fee50020}
+.social-auth-button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 6px 18px #2c1b111a}
+.social-auth-button:focus-visible{outline:3px solid #bf8b38;outline-offset:3px}
+.social-auth-button:disabled{cursor:wait;opacity:.65}
+.social-auth-note{margin:3px 0 0;text-align:center;font-size:12px;line-height:1.8;color:#887c73;word-break:keep-all}
+.social-auth-error{margin:0;padding:12px 14px;border-radius:12px;background:#fff0ec;color:#9a3825;font-size:14px;line-height:1.6;word-break:keep-all}
+.social-browser-help{padding:12px 14px;background:#f7f5f2;border-radius:12px;color:#6b5b4c;font-size:13px;line-height:1.6}
+.social-browser-help p{margin:0 0 8px}.social-browser-help button{display:flex;align-items:center;gap:6px;font-weight:650;text-decoration:underline;text-underline-offset:3px}
+.social-signout{display:grid;gap:8px}.social-signout>button{justify-self:center}.social-signout p{font-size:14px;color:#9a3825}
+.giut-profile-image{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.avatar>.giuti,.profile-avatar>.giuti{width:90%;height:90%}
+.avatar-picker{border:0;padding:0;margin:0}.avatar-picker legend{font-weight:600;font-size:14px;margin-bottom:10px}
+.avatar-picker>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.avatar-picker label{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid #e9e3dc;border-radius:14px;padding:10px 3px;cursor:pointer;font-size:12px!important;font-weight:500!important;text-align:center}
+.avatar-picker label.selected{border-color:#bc8732;background:#fff6dc;box-shadow:0 0 0 1px #bc8732}
+.avatar-picker label:focus-within{outline:2px solid #bc8732;outline-offset:3px}
+.avatar-picker input{position:absolute;opacity:0;width:1px;height:1px}.avatar-preview{display:block;width:48px;height:52px}.avatar-preview .giuti{width:100%;height:100%}
+.my-workspace-section{margin:28px 0}.my-workspace-section .section-title h2{font-size:20px}
+.my-course-list{display:grid;gap:10px}.my-course-list button{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;background:white;border:1px solid #e7e0d9;border-radius:18px;text-align:left}.my-course-list strong,.my-course-list small{display:block}.my-course-list small{font-size:13px;color:#8a7b6d;margin-top:5px}
+.auth-page{min-height:100dvh;display:grid;place-items:center;padding:28px 16px;background:#f6f1e9}.auth-page-card{width:min(100%,430px);background:white;padding:34px 28px;border-radius:28px;box-shadow:0 12px 50px #46251510}.auth-page-card h1{font-size:24px;line-height:1.4;letter-spacing:-1px;color:#462518}.auth-page-card>p{font-size:14px;color:#8a7b6d;margin:12px 0;line-height:1.7}.auth-page-cat{width:126px;height:140px;margin:25px auto}.auth-page-back{display:block;margin-top:20px;text-align:center;font-size:14px;color:#8a7b6d;text-decoration:underline}
+@media(max-width:420px){.app-dialog.login-dialog{padding:30px 22px 24px;gap:18px}.login-dialog .login-mark.giuti-login{height:126px}.avatar-picker>div{gap:5px}}
+@media(prefers-reduced-motion:reduce){.social-auth-button{transition:none}}

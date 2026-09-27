@@ -1,0 +1,3 @@
+.giut-auth-panel { display: grid; gap: 16px; }
+.giut-auth-links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.giut-auth-panel .form-note { line-height: 1.6; }

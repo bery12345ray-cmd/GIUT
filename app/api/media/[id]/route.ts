@@ -1,0 +1,2 @@
+import {bindings,respondError} from '@/lib/server';
+export async function GET(_req:Request,context:{params:Promise<{id:string}>}){try{const {id}=await context.params;if(!/^[a-f0-9-]{36}$/.test(id))return new Response('Not found',{status:404});const file=await bindings().BUCKET.get(id);if(!file)return new Response('Not found',{status:404});return new Response(file.body,{headers:{'Content-Type':file.httpMetadata?.contentType||'image/jpeg','Cache-Control':'private, max-age=3600','X-Content-Type-Options':'nosniff'}});}catch(e){return respondError(e);}}
