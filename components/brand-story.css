@@ -118,6 +118,12 @@ body .explore-panel .list-heading b{
   font-weight:inherit;
 }
 
+@media(min-width:761px){
+  body .map-toolbar{left:478px;}
+  body .map-bottom-note.mascot-guide{left:478px;}
+  body .provider-note{left:478px;}
+}
+
 @media(max-width:760px){
   body .explore-panel,
   body .show-welcome .explore-panel{
