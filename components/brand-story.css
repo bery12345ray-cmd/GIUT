@@ -96,14 +96,14 @@ body .scrapbook-heading{
   position:relative;
   min-height:220px;
   overflow:visible;
-  padding-right:min(43vw,500px);
+  padding-right:min(34vw,380px);
 }
 body .scrapbook-heading .scrapbook-hanging-cat{
   position:absolute;
   z-index:2;
-  right:3%;
-  bottom:-68px;
-  width:min(43vw,470px);
+  right:7%;
+  bottom:-42px;
+  width:min(30vw,330px);
   height:auto;
   pointer-events:none;
   object-fit:contain;
@@ -145,6 +145,6 @@ body .explore-panel .list-heading b{
   body .explore-panel .list-heading{min-height:54px;padding:13px 20px 10px;}
   body .explore-panel .list-heading>span{font-size:16px;}
   body .explore-panel .spot-list{padding:0 14px 18px;}
-  body .scrapbook-heading{min-height:170px;padding-right:43%;}
-  body .scrapbook-heading .scrapbook-hanging-cat{right:-3%;bottom:-39px;width:49%;}
+  body .scrapbook-heading{min-height:170px;padding-right:40%;}
+  body .scrapbook-heading .scrapbook-hanging-cat{right:1%;bottom:-24px;width:min(42%,190px);}
 }
