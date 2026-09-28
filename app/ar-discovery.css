@@ -28,7 +28,7 @@
 .discovery-memory-switcher>button:not(.ar-glass) { display:flex; align-items:center; justify-content:center; width:44px; height:44px; background:#251e1b60; border:1px solid #ffffff60; border-radius:50%; color:white; }
 .discovery-memory-switcher>span { font-size:14px; text-shadow:0 1px 5px #000; }
 .discovery-footer { position:relative; z-index:5; display:flex; align-items:center; flex-direction:column; gap:9px; padding:10px 22px 18px; flex-shrink:0; }
-.discovery-radar { display:flex; align-items:center; width:min(460px,100%); gap:11px; padding:11px 16px 11px 6px; background:#fff7eee8; border:1px solid #ffffff99; border-radius:22px; backdrop-filter:blur(10px); color:var(--ink); }
+.discovery-radar { position:relative; top:-10px; display:flex; align-items:center; width:min(460px,100%); gap:11px; padding:11px 16px 11px 6px; background:#fff7eee8; border:1px solid #ffffff99; border-radius:22px; backdrop-filter:blur(10px); color:var(--ink); }
 .discovery-cat { position:relative; flex-shrink:0; width:60px; height:65px; display:flex; align-items:center; justify-content:center; }
 .discovery-cat .giuti { width:57px; height:65px; }
 .discovery-radar>div:last-child { flex:1; min-width:0; }

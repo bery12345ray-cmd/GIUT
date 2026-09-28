@@ -41,7 +41,7 @@ export default function Scrapbook({spots,user,kakaoKey,renderSpot,onOpen,onFollo
  async function saveOrder(){if(!folder)return;try{await mutation.mutateAsync({op:'folder-order',id:folder.id,spotIds:orderedIds});setOrder(null);toast.success('방문 순서를 저장했어요.');}catch{}}
 
  return <>
-  <div className="page-heading scrapbook-heading"><div><p className="eyebrow">MY LITTLE COLLECTION</p><h1>{folder?folder.name:'다시 기웃거릴 곳'}</h1><p>{folder?'마음에 담아둔 장소를 나만의 순서로.':'장소를 모으고, 나만의 한 바퀴를 만들어보세요.'}</p></div><Giuti pose="love" animated className="scrapbook-cat"/></div>
+  <div className="page-heading scrapbook-heading"><div><p className="eyebrow">MY LITTLE COLLECTION</p><h1>{folder?folder.name:'다시 기웃거릴 곳'}</h1><p>{folder?'마음에 담아둔 장소를 나만의 순서로.':'장소를 모으고, 나만의 한 바퀴를 만들어보세요.'}</p></div><img className="scrapbook-hanging-cat" src="/giuti/hanging-v1.png" alt="배너에 매달린 기웃이"/></div>
   {folder?<>
    <div className="folder-toolbar"><button className="text-button" onClick={()=>{setFolderId(null);setOrder(null);}}><ChevronLeft size={17}/>폴더 목록</button><span><LockKeyhole size={13}/>나만 보기 · {folder.spotIds.length}곳</span><div>{!folder.isDefault&&<><button className="icon-button" aria-label="폴더 이름 변경" onClick={()=>setFolderForm({id:folder.id,name:folder.name})}><Pencil size={17}/></button><button className="icon-button" aria-label="폴더 삭제" onClick={()=>setRemove({type:'folder',id:folder.id})}><Trash2 size={17}/></button></>}</div></div>
    <div className="folder-course-prompt"><span><Route size={22}/><span><strong>이 장소들로 한 바퀴, 어때요?</strong><small>방문 순서를 정해서 산책·러닝 코스로 공유해요.</small></span></span><button className="lime-button" disabled={folderItems.length<2} onClick={()=>setEditor({ids:orderedIds})}>코스 만들기 <ArrowUpRight size={16}/></button></div>

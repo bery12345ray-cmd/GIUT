@@ -91,6 +91,33 @@ body .explore-panel .card-title{color:#4c281f;}
 body .explore-panel .panel-footer{background:#fff;border-color:#eee1d8;color:#9a7764;}
 body .explore-panel .panel-footer button{color:#4c281f;}
 
+/* Collection banner character and tidy spot counter. */
+body .scrapbook-heading{
+  position:relative;
+  min-height:220px;
+  overflow:visible;
+  padding-right:min(43vw,500px);
+}
+body .scrapbook-heading .scrapbook-hanging-cat{
+  position:absolute;
+  z-index:2;
+  right:3%;
+  bottom:-68px;
+  width:min(43vw,470px);
+  height:auto;
+  pointer-events:none;
+  object-fit:contain;
+}
+body .explore-panel .list-heading b{
+  margin-left:4px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:inherit;
+  font-size:inherit;
+  font-weight:inherit;
+}
+
 @media(max-width:760px){
   body .explore-panel,
   body .show-welcome .explore-panel{
@@ -118,4 +145,6 @@ body .explore-panel .panel-footer button{color:#4c281f;}
   body .explore-panel .list-heading{min-height:54px;padding:13px 20px 10px;}
   body .explore-panel .list-heading>span{font-size:16px;}
   body .explore-panel .spot-list{padding:0 14px 18px;}
+  body .scrapbook-heading{min-height:170px;padding-right:43%;}
+  body .scrapbook-heading .scrapbook-hanging-cat{right:-3%;bottom:-39px;width:49%;}
 }
