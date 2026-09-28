@@ -1,6 +1,6 @@
 'use client';
 import {useEffect,useRef,useState,type CSSProperties,type PointerEvent,type ReactNode} from 'react';
-import {ChevronDown,Compass} from 'lucide-react';
+import {ChevronDown,ChevronUp,Compass} from 'lucide-react';
 
 export default function ExplorePanel({intro,children,expanded,onExpanded,hidden,onHidden}:{intro:ReactNode;children:ReactNode;expanded:boolean;onExpanded:(v:boolean)=>void;hidden:boolean;onHidden:(v:boolean)=>void}){
   const drag=useRef<{id:number;x:number;y:number;time:number}|null>(null);
@@ -24,7 +24,7 @@ export default function ExplorePanel({intro,children,expanded,onExpanded,hidden,
         if(!window.matchMedia('(max-width:760px)').matches||event.button!==0||(event.target as Element).closest('button,a,input,select,textarea'))return;
         drag.current={id:event.pointerId,x:event.clientX,y:event.clientY,time:performance.now()};event.currentTarget.setPointerCapture(event.pointerId);
       }} onPointerMove={event=>{if(drag.current?.id===event.pointerId)setOffset(Math.max(0,event.clientY-drag.current.y));}} onPointerUp={event=>end(event)} onPointerCancel={event=>end(event,true)}>
-        <div className="panel-grab-area"><span className="panel-grab-line"/><button type="button" className="panel-expand-button" aria-label={expanded?'골목 목록 접기':'골목 목록 펼치기'} aria-expanded={expanded} onClick={()=>onExpanded(!expanded)}><Compass size={16}/></button><button type="button" className="panel-dismiss-button" aria-label="골목 이야기 패널 숨기기" onClick={()=>onHidden(true)}><ChevronDown size={20}/></button></div>
+        <div className="panel-grab-area"><span className="panel-grab-line"/><button type="button" className="panel-expand-button" aria-label={expanded?'골목 목록 접기':'골목 목록 펼치기'} aria-expanded={expanded} onClick={()=>onExpanded(!expanded)}>{expanded?<ChevronDown size={18}/>:<ChevronUp size={18}/>}</button><button type="button" className="panel-dismiss-button" aria-label="골목 이야기 패널 숨기기" onClick={()=>onHidden(true)}><ChevronDown size={20}/></button></div>
         {intro}
       </div>
       <div className="panel-content">{children}</div>
