@@ -16,15 +16,15 @@ export type FollowTarget={spots:Spot[];title:string;mode:'walk'|'run'};
 type Phase='preview'|'navigating'|'paused'|'arrived'|'complete';
 type Progress=ReturnType<typeof routeProgress>;
 
-function WhitePawTrail({angle}:{angle:number}){
+function WhitePawTrail({angle,turn}:{angle:number;turn:'left'|'straight'|'right'}){
  const root=useRef<HTMLDivElement>(null);
  useEffect(()=>{
   if(!root.current)return;const mm=gsap.matchMedia();
   mm.add('(prefers-reduced-motion: no-preference)',()=>{const feet=root.current!.querySelectorAll('.guide-paw');gsap.timeline({repeat:-1,repeatDelay:.35}).fromTo(feet,{autoAlpha:0,scale:.68},{autoAlpha:.62,scale:1,duration:.32,stagger:.19,ease:'power2.out'}).to(feet,{autoAlpha:0,duration:.6,stagger:.12},'>-.15');});
   mm.add('(prefers-reduced-motion: reduce)',()=>{gsap.set(root.current!.querySelectorAll('.guide-paw'),{autoAlpha:.55});});return()=>mm.revert();
  },[]);
- useEffect(()=>{if(root.current)gsap.to(root.current,{x:Math.max(-100,Math.min(100,angle*1.2)),rotation:angle*.45,duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:.5,ease:'power2.out',overwrite:true});return()=>{if(root.current)gsap.killTweensOf(root.current);};},[angle]);
- return <div className="white-paw-trail" ref={root} aria-hidden="true">{Array.from({length:8},(_,i)=><span className="guide-paw" key={i} style={{bottom:18+i*30,left:`calc(50% + ${i%2?15:-28}px)`,width:Math.max(23,53-i*4),height:Math.max(23,53-i*4)}}><PawPrint fill="currentColor" strokeWidth={0} style={{transform:i%2?'scaleX(-1)':'none'}}/></span>)}</div>;
+ useEffect(()=>{if(root.current)gsap.to(root.current,{x:Math.max(-100,Math.min(100,angle*1.2)),rotation:angle*.7,duration:window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:.5,ease:'power2.out',overwrite:true});return()=>{if(root.current)gsap.killTweensOf(root.current);};},[angle]);
+ return <div className={'white-paw-trail is-'+turn} ref={root} aria-hidden="true">{Array.from({length:8},(_,i)=><span className="guide-paw" key={i} style={{bottom:18+i*30,left:`calc(50% + ${i%2?15:-28}px)`,width:Math.max(23,53-i*4),height:Math.max(23,53-i*4),color:'var(--yellow)'}}><PawPrint fill="currentColor" strokeWidth={0} style={{transform:i%2?'scaleX(-1)':'none'}}/></span>)}</div>;
 }
 
 export default function FollowGuide({target,kakaoKey,onClose,onOpen}:{target:FollowTarget;kakaoKey:string;onClose:()=>void;onOpen:(s:Spot)=>void}){
@@ -43,6 +43,7 @@ export default function FollowGuide({target,kakaoKey,onClose,onOpen}:{target:Fol
  const goodGPS=usableFix(fix,now)&&!gpsError;
  const goodHeading=heading!==null&&now-heading.time<12000;
  const delta=progress&&heading?angleDelta(progress.bearing,heading.value):0;
+ const turn=Math.abs(delta)<18?'straight':delta>0?'right':'left';
  const showPaws=phase==='navigating'&&view==='camera'&&!!media&&goodGPS&&goodHeading&&!offRoute&&!!progress&&progress.offset<=Math.max(35,(fix?.accuracy||0)*1.5)&&Math.abs(delta)<85;
  const remainder=route&&leg&&progress?progress.remaining+route.legs.slice(waypoint-base+1).reduce((sum,l)=>sum+l.distance,0):route?.distance||0;
  const remainingStops=useMemo(()=>target.spots.slice(base),[target.spots,base]);
@@ -79,7 +80,7 @@ export default function FollowGuide({target,kakaoKey,onClose,onOpen}:{target:Fol
  function start(mode:'map'|'camera'){
   stop();const id=++generation.current;setPhase('navigating');state.current={...state.current,phase:'navigating'};setView(mode);setNotice('');setGPSError('');setOffRoute(false);setHeading(null);headingValue.current=null;setNow(Date.now());setCameraBusy(mode==='camera');evidence.current=freshEvidence();
   let cameraFallback=false;
-  const next=beginNavigationSensors({camera:mode==='camera',onFix,onHeading:value=>{if(!mounted.current||id!==generation.current)return;headingValue.current=smoothHeading(headingValue.current,value);setHeading({value:headingValue.current,time:Date.now()});},onStream:stream=>{if(!mounted.current||id!==generation.current){stream.getTracks().forEach(t=>t.stop());return;}setMedia(stream);setCameraBusy(false);},onError:(kind,message)=>{if(!mounted.current||id!==generation.current)return;setNotice(message);if(kind==='location'){setGPSError(message);setProgress(null);}if(kind==='camera'){cameraFallback=true;session.current?.stopCamera();setMedia(null);setCameraBusy(false);}}});
+  const next=beginNavigationSensors({camera:mode==='camera',onFix,onHeading:value=>{if(!mounted.current||id!==generation.current)return;headingValue.current=smoothHeading(headingValue.current,value);setHeading({value:headingValue.current,time:Date.now()});},onStream:stream=>{if(!mounted.current||id!==generation.current){stream.getTracks().forEach(t=>t.stop());return;}setMedia(stream);setCameraBusy(false);},onError:(kind,message)=>{if(!mounted.current||id!==generation.current)return;setNotice(message);if(kind==='location'){setGPSError(message);setProgress(null);}if(kind==='camera'){cameraFallback=true;session.current?.stopCamera();setMedia(null);setCameraBusy(false);setView('map');}}});
   session.current=next;if(cameraFallback)next.stopCamera();next.ready.finally(()=>{if(mounted.current&&id===generation.current)setCameraBusy(false);});
  }
  function mapView(){session.current?.stopCamera();setMedia(null);setView('map');setCameraBusy(false);}
@@ -93,7 +94,7 @@ export default function FollowGuide({target,kakaoKey,onClose,onOpen}:{target:Fol
    {phase==='complete'?<div className="follow-complete"><Giuti pose="happy" animated/><p className="eyebrow">A LITTLE ADVENTURE, COMPLETE</p><h2>오늘도 잘 기웃거렸어요!</h2><p>{target.spots.length}곳의 이야기를 만났어요.</p><button className="primary-button" onClick={close}>지도 돌아가기 <ArrowRight size={17}/></button></div>:<>
     {phase==='arrived'?<div className="arrival-panel"><Giuti pose="happy" animated/><span className="arrival-label"><Check size={16}/>목적지 가까이에 도착했어요</span><h2>{current.title}</h2><p>{current.ar?'이곳에 남겨진 AR 기록을 열어보세요.':'이 장소에 남겨진 이야기를 만나보세요.'}</p>{memoryQuery.isPending?<p role="status">이 장소의 기록을 불러오는 중…</p>:memoryQuery.isError?<div className="follow-error" role="alert"><p>{memoryQuery.error.message}</p><button className="text-button" onClick={()=>memoryQuery.refetch()}>기록 다시 불러오기</button></div>:memory&&<button className="arrival-memory" onClick={()=>onOpen(memory)}>{memory.image&&<img src={memory.image} alt=""/>}<span><small>{memory.ar?'AR 사진·메모':'장소 기록'} · {memory.nickname}</small><small>{new Date(memory.createdAt).toLocaleString('ko-KR')}</small><strong>{memory.title}</strong><p>{memory.body.slice(0,80)}</p><span>사진·이야기·댓글 보기 <ArrowUpRight size={15}/></span></span></button>}<button className="primary-button" onClick={nextStop}>{waypoint===target.spots.length-1?'탐험 마치기':'다음 경유지로 이동'}<ArrowRight size={18}/></button><small className="arrival-accuracy">GPS 위치를 기준으로 확인했어요.</small></div>:<>
      <div className="follow-surface">
-      {view==='camera'&&phase==='navigating'?<div className="follow-camera"><video ref={video} autoPlay muted playsInline/>{showPaws&&<WhitePawTrail angle={delta}/>}<div className="camera-nav-label"><PawPrint size={14}/>{route?'도보 경로':'목적지 방향'} · 고양이 발자국</div>{cameraBusy?<div className="camera-state"><LoaderCircle className="spin" size={25}/><p>카메라를 연결하는 중…</p></div>:!showPaws&&<div className="camera-state"><Navigation size={26} style={{transform:`rotate(${delta}deg)`}}/><p>{!media?'카메라 권한을 확인하고 다시 시작해주세요.':!goodGPS?'정확한 위치를 확인하고 있어요.':!goodHeading?'휴대폰을 천천히 돌려 방향을 확인해주세요.':offRoute?'경로를 다시 확인해주세요.':Math.abs(delta)>=85?'발자국 방향으로 천천히 돌아보세요.':'도보 경로에 가까이 이동해주세요.'}</p></div>}</div>:<RouteMap spots={remainingStops} route={route} origin={fix} kakaoKey={kakaoKey}/>}
+      {view==='camera'&&phase==='navigating'?<div className="follow-camera"><video ref={video} autoPlay muted playsInline/>{showPaws&&<WhitePawTrail angle={delta} turn={turn}/>}<div className="camera-nav-label"><PawPrint size={14}/>카메라 오버레이 · {route?'도보 경로':'목적지 방향'}</div>{cameraBusy?<div className="camera-state"><LoaderCircle className="spin" size={25}/><p>카메라를 연결하는 중…</p></div>:!showPaws&&<div className="camera-state"><Navigation size={26} style={{transform:`rotate(${delta}deg)`}}/><p>{!media?'카메라 권한을 확인하고 다시 시작해주세요.':!goodGPS?'정확한 위치를 확인하고 있어요.':!goodHeading?'휴대폰을 천천히 돌려 방향을 확인해주세요.':offRoute?'경로를 다시 확인해주세요.':Math.abs(delta)>=85?'발자국 방향으로 천천히 돌아보세요.':'도보 경로에 가까이 이동해주세요.'}</p></div>}</div>:<RouteMap spots={remainingStops} route={route} origin={fix} kakaoKey={kakaoKey}/>}
       {phase==='paused'&&<div className="follow-paused"><Pause size={18}/>잠시 멈춤</div>}
      </div>
      <div className="follow-content"><div className="follow-destination"><span className="destination-icon"><PawPrint size={21}/></span><div><small>{target.spots.length>1?`${waypoint+1} / ${target.spots.length}번째 장소`:'함께 찾아갈 장소'}</small><h2>{current.title}</h2></div>{current.image&&<img src={current.image} alt=""/>}</div>
@@ -104,7 +105,6 @@ export default function FollowGuide({target,kakaoKey,onClose,onOpen}:{target:Fol
       {!route&&fix&&progress&&<div className="follow-metrics"><span><MapPin size={16}/>{formatDistance(progress.remaining)}<small>목적지까지 직선거리</small></span></div>}
       {(phase==='preview'||phase==='paused')&&<div className="follow-start-actions"><button className="primary-button" onClick={()=>start('camera')}><PawPrint size={20}/>{phase==='paused'?'이어서 발자국 따라가기':'현재 위치에서 발자국 따라가기'}</button></div>}
       {phase==='navigating'&&<div className="follow-active-actions"><button className="outline-button" onClick={()=>view==='map'?start('camera'):mapView()}>{view==='map'?<Camera size={18}/>:<Map size={18}/>} {view==='map'?'발자국 보기':'지도 보기'}</button><button className="outline-button" onClick={()=>start('camera')}><RotateCcw size={18}/>다시 연결</button><button className="outline-button" onClick={()=>pause()}><Pause size={18}/>일시정지</button><button className="outline-button" onClick={close}>종료</button></div>}
-      <p className="follow-caption">{route?'도보 경로의 방향을 안내해요.':'목적지 방향 안내예요. 도로의 굴곡이나 장애물은 반영하지 않아요.'} 발자국은 실제 바닥에 고정되지 않아요. 주변 길과 횡단보도를 확인해주세요.</p>
      </div>
     </>}
    </>}
